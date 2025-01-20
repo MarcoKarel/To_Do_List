@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page with Calendar</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4; /* Light Gray Background */
+            color: #333; /* Dark text color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .profile-container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #ff3b3b;
+            margin-bottom: 10px;
+        }
+
+        .calendar-container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header button {
+            background-color: #ff3b3b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .calendar-header button:hover {
+            background-color: #e63636;
+        }
+
+        .calendar-header h3 {
+            margin: 0;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar div {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .calendar div.header {
+            background-color: #ff3b3b;
+            color: white;
+            font-weight: bold;
+        }
+
+        .calendar div.day {
+            background-color: #fff;
+        }
+
+        .calendar div.day:hover {
+            background-color: #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h2>Your Profile</h2>
+        <p>Manage your personal information below.</p>
+    </div>
+
+    <div class="calendar-container">
+        <h2>Calendar</h2>
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)">&lt; Prev</button>
+            <h3 id="current-month-year"></h3>
+            <button onclick="changeMonth(1)">Next &gt;</button>
+        </div>
+        <div class="calendar" id="calendar"></div>
+    </div>
+
+    <script>
+        const calendarElement = document.getElementById("calendar");
+        const monthYearElement = document.getElementById("current-month-year");
+        let currentDate = new Date();
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            // Month Names
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            // Set Month and Year in Header
+            monthYearElement.textContent = `${monthNames[month]} ${year}`;
+
+            // Clear Previous Calendar
+            calendarElement.innerHTML = "";
+
+            // Add Weekday Headers
+            const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            weekdays.forEach(day => {
+                const dayElement = document.createElement("div");
+                dayElement.classList.add("header");
+                dayElement.textContent = day;
+                calendarElement.appendChild(dayElement);
+            });
+
+            // First Day and Total Days in Month
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Add Empty Cells for Days Before First Day
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement("div");
+                calendarElement.appendChild(emptyCell);
+            }
+
+            // Add Days in Month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement("div");
+                dayElement.classList.add("day");
+                dayElement.textContent = day;
+                calendarElement.appendChild(dayElement);
+            }
+        }
+
+        function changeMonth(step) {
+            currentDate.setMonth(currentDate.getMonth() + step);
+            renderCalendar(currentDate);
+        }
+
+        // Initial Render
+        renderCalendar(currentDate);
+    </script>
+</body>
+</html>

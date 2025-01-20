@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="../CSS/ProfilePage.css">    
+    <script src="../JS/ProfilePage.js"></script>
+
+</head>
+<body>
+    <div class="profile-container">
+        <h2>Your Profile</h2>
+
+        <!-- Profile Image Section -->
+        <div class="profile-image">
+            <img id="profileImg" src="https://via.placeholder.com/120" alt="Profile Image">
+            <label for="fileInput" class="upload-button">Change Image</label>
+            <input type="file" id="fileInput" style="display: none" accept="image/*">
+        </div>
+
+        <!-- Personal Information Section -->
+        <form id="profileForm">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name" value="John Doe">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" value="example@email.com">
+
+            <label for="bio">Short Bio</label>
+            <input type="text" id="bio" placeholder="Tell us about yourself" value="Lover of life and code!">
+
+            <button type="submit" class="save-button">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
