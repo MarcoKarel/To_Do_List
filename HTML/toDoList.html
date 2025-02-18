@@ -1,1 +1,192 @@
-<h1>TODOLIST</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List with Calendar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .input-group {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .input-group button {
+      padding: 10px;
+      border: none;
+      background-color: #ff4d4d;
+      color: white;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    .input-group button:hover {
+      background-color: #e04444;
+    }
+
+    .todo-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .todo-item:last-child {
+      border-bottom: none;
+    }
+
+    .todo-text {
+      flex: 1;
+      margin-left: 10px;
+    }
+
+    .toggle-button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #b9bbbe;
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+
+    .toggle-button.active {
+      background-color: #ff4d4d;
+    }
+
+    .delete-button {
+      background-color: transparent;
+      border: none;
+      color: #ff4d4d;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .delete-button:hover {
+      color: #e04444;
+    }
+
+    #calendar {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>To-Do List</h1>
+    <div class="input-group">
+      <input type="text" id="todoInput" placeholder="Add a new task...">
+      <button onclick="addTodo()">Add</button>
+    </div>
+    <ul class="todo-list" id="todoList"></ul>
+  </div>
+
+  <div id="calendar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: true,
+        dateClick: function (info) {
+          const task = prompt('Enter a task for ' + info.dateStr);
+          if (task) {
+            calendar.addEvent({
+              title: task,
+              start: info.dateStr,
+            });
+          }
+        },
+        eventClick: function (info) {
+          const action = confirm(`Do you want to delete the task: ${info.event.title}?`);
+          if (action) {
+            info.event.remove();
+          }
+        }
+      });
+
+      calendar.render();
+
+      window.addTodo = function () {
+        const input = document.getElementById('todoInput');
+        const todoList = document.getElementById('todoList');
+
+        if (input.value.trim() === '') return;
+
+        const listItem = document.createElement('li');
+        listItem.className = 'todo-item';
+
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'toggle-button';
+        toggleButton.onclick = function () {
+          toggleButton.classList.toggle('active');
+        };
+
+        const todoText = document.createElement('span');
+        todoText.className = 'todo-text';
+        todoText.textContent = input.value;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.innerHTML = '&times;';
+        deleteButton.onclick = function () {
+          todoList.removeChild(listItem);
+        };
+
+        listItem.appendChild(toggleButton);
+        listItem.appendChild(todoText);
+        listItem.appendChild(deleteButton);
+
+        todoList.appendChild(listItem);
+
+        input.value = '';
+      };
+    });
+  </script>
+</body>
+</html>
